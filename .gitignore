@@ -1,0 +1,17 @@
+# VS Code user settings
+.vscode/
+
+# VS user settings
+*.sln
+
+# .NET Core build output
+bin/
+obj/
+
+# Development settings
+*.Development.json
+
+# Development database
+Notes.Api/notes.db
+Notes.Api/notes.db-shm
+Notes.Api/notes.db-wal
