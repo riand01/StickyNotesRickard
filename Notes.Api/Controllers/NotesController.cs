@@ -72,7 +72,14 @@ public class NotesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<Note> Get([FromRoute] int noteId)
     {
+        var authorizationHeader = Request.Headers["Authorization"];
+        var user = BasicAuthenticationHandler.GetUserFrom(authorizationHeader);
         var note = _database.Notes.Find(noteId);
+
+        if (note.Author != user.Username)
+        {
+            return Forbid();
+        }
         if (note == null)
         {
             return NotFound($"Note with noteId {noteId} not found");
