@@ -3,8 +3,10 @@
     "",
     "\\Documents",
     "\\Notes.Api",
-    "\\Notes.Api\\Properties"
+    "\\Notes.Api\\Controllers",
+    "\\Notes.Api\\Properties",
+    "\\Notes.Client"
   ],
-  "SelectedNode": "\\Notes.Api\\appsettings.json",
+  "SelectedNode": "\\Notes.Api\\Controllers\\NotesController.cs",
   "PreviewInSolutionExplorer": false
 }
