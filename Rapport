@@ -1,0 +1,97 @@
+Rapport
+
+1. Sensitive Data ExPosure
+
+The Fault
+Problemet med denna uppgift var att lösenordet för användare "Test" låg statiskt lagrat i filen "appsettings.json" vilket inte är 
+bra ur säkerhetsynpunkt då i det här fallet projektet har laddats upp på GitHub där alla kan accessa den fil och se lösenordet.
+
+The Fix
+Detta löstes genom att kopiera filen "appsettings.json", döpa om den kopierade filen till "appsettings.Development.json" där lösenordet fick vara kvar,
+medans i orginalfilen togs lösenordet bort. Genom att spara lösenordet i en fill som inkluderar Development så ignoreras den av GitHub och kommer därmed
+ej att laddas upp.
+
+The Reflection
+Reflectionsmässigt tänker jag att man i framtiden aldrig har filer sparade med lösenord i projektet och om man skulle mot förmodan ha det kommer den 
+filen inte laddas upp mot github med hjälp av "Development".
+
+
+2. Broken Access Control
+
+The Fault
+Problemet med denna uppgift är att man som användare kan hämta andras anteckningar via note id, vilket tyder på att det inte finns någon åtkomstkontroll 
+som förhindrar detta.
+
+The Fix
+För att lösa detta behöver man öppna filen NotesController.cs och göra ändringar i GET-metoden. Genom att lägga till det kod-stycke som medfördes i The Fix kommer 
+API:et att kontrollera om den autentiserade användaren är den samma som anteckningen tillhör. Om så inte är fallet får användaren felmeddelandet -
+"403 Error: Forbidden" som indikerar att användaren ej är behörig att läsa den efterfrågade anteckningen.
+
+The Reflection
+För att förhindra ett sådant problem i framtiden bör man implementera korrekta åtkomstkontroller. Detta är kanske något som bör upptäckas i test-stadiet.
+
+
+3. Cross Site Scripting
+
+The Fault
+Problemet med denna uppgift är att stickyNotes har en sårbarhet genom XSS, vilket innebär att man kan skriva JavaScript kod i notesen och exekvera dem.
+Detta kan bli problematiskt om man implementerar kod med onda avsikter.
+
+The Fix
+Lösningen på problemet är att i filen script.js ändra från innerHtml till InnerText som signalerar till webbläsaren att allt som tillhandahålls till notesen ska visas
+som ren text. Detta i sin tur förhindrar att skadlig JavaScript kod kan exekveras.
+
+The Reflection
+För att förebygga XSS-sårbarheter bör utvecklar undvika att använda innerHTML där man vet att text ska infogas från användaren. Sedan bör man använda sig av ramverk
+så som react eller angular, då de hanterar manipulation av DOM-element på ett säkrare sätt.
+
+
+4. SQL Injection
+
+The Fault
+Problemet i denna uppgift är att man har använt sig av ren sql kod för att kommunicera med databasen via api, vilket öppnar upp för en sql injection sårbarhet.
+Användaren kan tex filtrera med sql kod och få fram alla användares anteckningar.
+
+The Fix
+Genom att ersätta sql kod med C# linq expressions används parametrar och parametriserade frågor för att integrera med databasen. Med Linq används ett typsäkert sätt
+att formulera databasförfrågningar.
+
+The Reflection
+För att förebygga sql injections bör utvecklare alltid använda parametrar och förberedda frågot när de integrerar med databaser.
+
+
+5. Insecure Deserialization
+
+The Fault
+Problemet i denna uppgift handlar om sårbarheter som kan uttnytjas när data som ät serialiserad i ett format, deserialiseras tillbaka till objekt i programmet.
+Sårbarheten uppstår då när deserialiseringen inte hanteras korrekt och tillåter angripare att exekvera skadlig kod. I detta fall handlar det om sårbarheter
+kopplade till nuggetpaketet NewtonSOft JSON.
+
+The Fix
+Lösningen på problemet i detta fall handlar om att konfigurera NewtonSoft egenskapen (Enumen) TypeNameHandling.Auto till .None vilket förhindrar att NewtonSoft tolkar
+och använder type-egenskapen från inkommande JSON-data flr att dynamiskt bestämma typen som ska deserialiseras. Istället används den förväntade typen, vilket
+förhindrar användare från att exekvera skadlig kod.
+
+The Reflection
+Här kommer en framgooglad lista över best practice för att motverka Insecure Deserialization för framtida projekt:
+
+* Använd säkra bibliotek eller funktioner för serialisering och deserialisering.
+* Validera och filtrera indata innan du deserialiserar dem.
+* Använd kryptering, signaturer eller HMAC för att skydda serialiserade data.
+* Begränsa åtkomsten till deserialiseringsfunktionen och använd principen om minsta privilegium.
+* Använd whitelist eller blacklist för att kontrollera vilka objekttyper som kan deserialiseras.
+
+
+6. Vulnerable and Outdated Compnents
+
+The Fault
+Problemet i denna uppgift handlar om användningen av falska nuget paket. I detta projekt har en falsk verision av nuget paketet Swashbuckle.AspNetCore använts
+och det utnyttjar en enviromentVariables för att aktivera sårbarheter. Genom att ändra enviromentVariables till true kan angripare uttnytja den falska versionen
+av paketet och få sårbarheten att aktiveras.
+
+The Fix
+Lösningen på problemet är att uppdatera projektets beroenden för att använda den korrekta och uppdaterade versionen av nuget paketet.
+
+The Reflection
+För att motverka liknande problem inför ny projekt bör man regelbundet uppdatera tredjepartspaket och bibliotek. Sedan finns det lösningar som automatisk
+beroendeövervakning genom Dependabot för GitHub-projekt som fungerar så att de övervakar projektberoenden och meddelar om nya versioner eller sårbarheter.
