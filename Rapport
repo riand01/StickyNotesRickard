@@ -57,19 +57,19 @@ Genom att ersätta sql kod med C# linq expressions används parametrar och param
 att formulera databasförfrågningar.
 
 The Reflection
-För att förebygga sql injections bör utvecklare alltid använda parametrar och förberedda frågot när de integrerar med databaser.
+För att förebygga sql injections bör utvecklare alltid använda parametrar och förberedda frågor när de integrerar med databaser.
 
 
 5. Insecure Deserialization
 
 The Fault
-Problemet i denna uppgift handlar om sårbarheter som kan uttnytjas när data som ät serialiserad i ett format, deserialiseras tillbaka till objekt i programmet.
+Problemet i denna uppgift handlar om sårbarheter som kan uttnytjas när data som är serialiserad i ett format, deserialiseras tillbaka till objekt i programmet.
 Sårbarheten uppstår då när deserialiseringen inte hanteras korrekt och tillåter angripare att exekvera skadlig kod. I detta fall handlar det om sårbarheter
 kopplade till nuggetpaketet NewtonSOft JSON.
 
 The Fix
 Lösningen på problemet i detta fall handlar om att konfigurera NewtonSoft egenskapen (Enumen) TypeNameHandling.Auto till .None vilket förhindrar att NewtonSoft tolkar
-och använder type-egenskapen från inkommande JSON-data flr att dynamiskt bestämma typen som ska deserialiseras. Istället används den förväntade typen, vilket
+och använder type-egenskapen från inkommande JSON-data för att dynamiskt bestämma typen som ska deserialiseras. Istället används den förväntade typen, vilket
 förhindrar användare från att exekvera skadlig kod.
 
 The Reflection
@@ -86,7 +86,7 @@ Här kommer en framgooglad lista över best practice för att motverka Insecure 
 
 The Fault
 Problemet i denna uppgift handlar om användningen av falska nuget paket. I detta projekt har en falsk verision av nuget paketet Swashbuckle.AspNetCore använts
-och det utnyttjar en enviromentVariables för att aktivera sårbarheter. Genom att ändra enviromentVariables till true kan angripare uttnytja den falska versionen
+och det utnyttjar en enviromentVariable för att aktivera sårbarheter. Genom att ändra enviromentVariables till true kan angripare uttnytja den falska versionen
 av paketet och få sårbarheten att aktiveras.
 
 The Fix
